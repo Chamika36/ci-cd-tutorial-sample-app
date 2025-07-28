@@ -1,0 +1,25 @@
+# Taken from: https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-python
+# and: https://docs.github.com/en/free-pro-team@latest/actions/guides/publishing-docker-images
+# and adapted. More info on workflow syntax: https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions
+name: deploy
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  # Run code tests before building the image, to ensure it is good to go
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Royal-Pos-Build
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: ~/ase/build_1.sh
